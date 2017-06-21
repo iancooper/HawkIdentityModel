@@ -1,4 +1,4 @@
-﻿#if NET452
+﻿#if NET461
 using Microsoft.Owin;
 #endif
 using System;
@@ -10,7 +10,7 @@ using Thinktecture.IdentityModel.Hawk.Core.MessageContracts;
 
 namespace Hawk.Middleware
 {
-#if NET452
+#if NET461
     public class OwinRequestMessage : OwinMessage, IRequestMessage
     {
         private const string PARAMETER_KEY = "HK_Challenge";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
@@ -134,6 +135,8 @@ namespace Thinktecture.IdentityModel.Hawk.Client
                 this.artifacts.ApplicationSpecificData = options.NormalizationCallback(request);
 
             var normalizedRequest = new NormalizedRequest(request, this.artifacts);
+            Debug.WriteLine($"Normalized Request: {normalizedRequest}");
+
             this.crypto = new Cryptographer(normalizedRequest, this.artifacts, credential);
 
             // Sign the request
@@ -143,8 +146,11 @@ namespace Thinktecture.IdentityModel.Hawk.Client
             string payload = includePayloadHash ? await request.ReadBodyAsStringAsync() : null;
             crypto.Sign(payload, request.ContentType);
 
-            request.Authorization = new AuthenticationHeaderValue(HawkConstants.Scheme,
-                                                this.artifacts.ToAuthorizationHeaderParameter());
+            var authenticationHeaderValue = new AuthenticationHeaderValue(HawkConstants.Scheme,
+                this.artifacts.ToAuthorizationHeaderParameter());
+
+            request.Authorization = authenticationHeaderValue;
+            Debug.WriteLine($"Auth Header: {authenticationHeaderValue}");
         }
 
         /// <summary>

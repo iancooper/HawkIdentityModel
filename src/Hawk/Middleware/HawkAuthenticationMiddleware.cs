@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 #if NETSTANDARD1_6
 using Microsoft.AspNetCore.Http;
-#elif NET452
+#elif NET461
 using Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Infrastructure;
@@ -27,7 +27,7 @@ namespace Hawk.Middleware
         }
 
     }
-#elif NET452
+#elif NET461
     public class HawkAuthenticationMiddleware : AuthenticationMiddleware<HawkAuthenticationOptions>
     {
         public HawkAuthenticationMiddleware(OwinMiddleware next, IAppBuilder app, HawkAuthenticationOptions options)

@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using Thinktecture.IdentityModel.Hawk.Core;
 using Thinktecture.IdentityModel.Hawk.Core.Helpers;
 using Thinktecture.IdentityModel.Hawk.Etw;
+using Thinktecture.IdentityModel.Hawk.Core.Extensions;
+
 
 namespace Thinktecture.IdentityModel.Hawk.WebApi
 {
-#if NET452
+#if NET461
     /// <summary>
     /// The message handler that performs the authentication based on the authenticity of the HMAC.
     /// Add a new instance of this handler to config.MessageHandlers in WebApiConfig.Register().
@@ -42,7 +44,7 @@ namespace Thinktecture.IdentityModel.Hawk.WebApi
 
                 if (principal != null && principal.Identity.IsAuthenticated)
                 {
-                    request.GetRequestContext().Principal = principal;
+                    request.SetUserPrincipal(principal);
 
                     HawkEventSource.Log.Debug("Authentication Successful and principal set for " + principal.Identity.Name);
                 }
@@ -58,8 +60,13 @@ namespace Thinktecture.IdentityModel.Hawk.WebApi
             catch (Exception exception)
             {
                 HawkEventSource.Log.Exception(exception.ToString());
-
-                var response = request.CreateResponse(HttpStatusCode.Unauthorized);
+                
+     var response = new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    RequestMessage = request
+                };
+                    
                 response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue(HawkConstants.Scheme));
 
                 return response;

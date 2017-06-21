@@ -1,9 +1,5 @@
 ﻿using System;
-#if NET452
 using System.Security.Cryptography;
-using Thinktecture.IdentityModel.Hawk.Etw;
-#endif
-using Hawk.Middleware;
 using Thinktecture.IdentityModel.Hawk.Core.Extensions;
 
 namespace Thinktecture.IdentityModel.Hawk.Core.Helpers
@@ -34,17 +30,19 @@ namespace Thinktecture.IdentityModel.Hawk.Core.Helpers
         {
             if (data == null || data.Length == 0)
                 throw new ArgumentException("Invalid data to hash");
-#if NET452
-            using (var hashAlgorithm = HashAlgorithm.Create(this.algorithmName))
+            
+            using (var hashAlgorithm = GetHashAlgoirthm())
             {
                 return hashAlgorithm.ComputeHash(data);
             }
-#elif NETSTANDARD1_6
-            using (var hashAlgorithm = HashAlgoirthmFactory.Create(this.algorithmName))
-            {
-                return hashAlgorithm.ComputeHash(data);
-            }
-#endif 
+        }
+
+        private HashAlgorithm GetHashAlgoirthm()
+        {
+            if (algorithmName == SupportedAlgorithms.SHA1.ToString())
+                return SHA1.Create();
+
+            return SHA256.Create();
         }
 
         /// <summary>
@@ -68,18 +66,21 @@ namespace Thinktecture.IdentityModel.Hawk.Core.Helpers
 
             if (key == null)
                 throw new ArgumentException("Invalid key");
-#if NET452
-            using (var algorithm = KeyedHashAlgorithm.Create("hmac" + this.algorithmName))
+          
+
+            using (var algorithm = GetHashKeyedAlgoirthm())
             {
                 algorithm.Key = key;
                 return algorithm.ComputeHash(data);
             }
-#elif NETSTANDARD1_6
-            using (var hashAlgorithm = HashAlgoirthmFactory.Create("hmac" + this.algorithmName))
-            {
-                return hashAlgorithm.ComputeHash(data);
-            }
-#endif
+        }
+
+        private KeyedHashAlgorithm GetHashKeyedAlgoirthm()
+        {
+            if (algorithmName == "hmac" + SupportedAlgorithms.SHA1.ToString())
+                return new HMACSHA1();
+
+            return new HMACSHA256();
         }
 
         /// <summary>

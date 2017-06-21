@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 #if NETSTANDARD1_6
 using Microsoft.AspNetCore.Http.Authentication;
-#elif NET452
+#elif NET461
 using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security;
 #endif
@@ -16,7 +16,7 @@ using Hawk.Middleware.Extensions;
 namespace Hawk.Middleware
 {
 #if NETSTANDARD1_6
-#elif NET452
+#elif NET461
     public class HawkAuthenticationHandler : AuthenticationHandler<HawkAuthenticationOptions>
     {
         private HawkServer server = null;

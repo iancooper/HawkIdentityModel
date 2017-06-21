@@ -1,4 +1,4 @@
-﻿#if NET452
+﻿#if NET461
 using Microsoft.Owin;
 #endif
 using System;
@@ -8,7 +8,7 @@ using Thinktecture.IdentityModel.Hawk.Core.Helpers;
 
 namespace Hawk.Middleware.Extensions
 {
-#if NET452
+#if NET461
     internal static class OwinRequestExtension
     {
         internal static bool IsPayloadHashPresent(this IOwinRequest request)

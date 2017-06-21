@@ -1,4 +1,4 @@
-﻿#if NET452
+﻿#if NET461
 using Microsoft.Owin;
 #endif
 using System;
@@ -12,7 +12,7 @@ using Thinktecture.IdentityModel.Hawk.Core.MessageContracts;
 
 namespace Hawk.Middleware
 {
-#if NET452
+#if NET461
     public class OwinResponseMessage : OwinMessage, IResponseMessage
     {
         private const string OwinResponseHeadersKey = "owin.ResponseHeaders";

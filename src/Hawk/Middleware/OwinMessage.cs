@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hawk.Middleware
 {
-#if NET452
+#if NET461
 
     public abstract class OwinMessage
     {
